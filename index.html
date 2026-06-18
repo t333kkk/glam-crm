@@ -224,6 +224,8 @@ textarea{resize:vertical;min-height:70px;}
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%);}
   .sidebar.open{transform:translateX(0);}
+  .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;}
+  .sidebar.open~.sb-overlay{display:block;}
   .main{margin-left:0;}
   .mob-nav{display:block;}
   .page{padding:16px;padding-bottom:80px;}
@@ -297,6 +299,7 @@ body.light input,body.light select,body.light textarea{background:#fff;color:#1A
   <nav id="nav"></nav>
   <div class="lang-sw" id="lang-sw"></div>
 </aside>
+<div class="sb-overlay" onclick="document.getElementById('sidebar').classList.remove('open')"></div>
 
 <!-- MOBILE NAV -->
 <nav class="mob-nav" id="mob-nav"><div class="mn-items" id="mob-nav-items"></div></nav>
@@ -540,6 +543,7 @@ let calView='day';
 function navigate(page){
   currentPage=page;
   window.location.hash=page;
+  document.getElementById('sidebar').classList.remove('open');
   render();
 }
 
