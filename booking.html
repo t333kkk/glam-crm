@@ -182,6 +182,34 @@ function saveDB(){ localStorage.setItem(STORE_KEY, JSON.stringify(DB)); }
 function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 loadDB();
 
+// if no services — load demo so booking page works standalone
+if(!DB.services.length){
+  DB.staff = [
+    {id:'s1',name:'Айгуль',specialization:'hair',color:'#6C5CE7',schedule:'Пн-Пт 09:00-18:00',commission:40},
+    {id:'s2',name:'Дана',specialization:'nails',color:'#FD79A8',schedule:'Пн-Сб 10:00-19:00',commission:45},
+    {id:'s3',name:'Мадина',specialization:'brows',color:'#00D2B8',schedule:'Вт-Сб 09:00-17:00',commission:40},
+    {id:'s4',name:'Камила',specialization:'care',color:'#FDCB6E',schedule:'Пн-Пт 10:00-20:00',commission:35}
+  ];
+  DB.services = [
+    {id:'sv1',name:'Женская стрижка',category:'hair',price:5000,duration:60},
+    {id:'sv2',name:'Окрашивание',category:'hair',price:15000,duration:120},
+    {id:'sv3',name:'Укладка',category:'hair',price:4000,duration:45},
+    {id:'sv4',name:'Кератиновое выпрямление',category:'hair',price:25000,duration:180},
+    {id:'sv5',name:'Маникюр + покрытие',category:'nails',price:6000,duration:90},
+    {id:'sv6',name:'Педикюр + покрытие',category:'nails',price:8000,duration:90},
+    {id:'sv7',name:'Наращивание ногтей',category:'nails',price:12000,duration:120},
+    {id:'sv8',name:'Коррекция бровей',category:'brows',price:3000,duration:30},
+    {id:'sv9',name:'Ламинирование бровей',category:'brows',price:5000,duration:45},
+    {id:'sv10',name:'Наращивание ресниц',category:'brows',price:8000,duration:90},
+    {id:'sv11',name:'Чистка лица',category:'care',price:7000,duration:60},
+    {id:'sv12',name:'Пилинг',category:'care',price:6000,duration:45},
+    {id:'sv13',name:'Массаж лица',category:'care',price:5000,duration:40}
+  ];
+  if(!DB.appointments) DB.appointments=[];
+  if(!DB.clients) DB.clients=[];
+  saveDB();
+}
+
 // ===== STATE =====
 let step = 1;
 let selected = { serviceId:null, staffId:null, date:null, time:null, name:'', phone:'', instagram:'' };
@@ -209,7 +237,7 @@ function render(){
 
   // lang
   document.getElementById('lang-sw').innerHTML = ['ru','kz'].map(l =>
-    `<button class="${l===lang?'active':''}" onclick="lang='${l}';localStorage.setItem('glam_lang','${l}');render();">${l.toUpperCase()}</button>`
+    `<button class="${l===lang?'active':''}" onclick="switchLang('${l}')">${l.toUpperCase()}</button>`
   ).join('');
 
   // steps indicator
@@ -471,6 +499,12 @@ window.submitBooking = function(){
 window.resetBooking = function(){
   selected = { serviceId:null, staffId:null, date:null, time:null, name:'', phone:'', instagram:'' };
   step = 1;
+  render();
+};
+
+window.switchLang = function(l){
+  lang = l;
+  localStorage.setItem('glam_lang', l);
   render();
 };
 
