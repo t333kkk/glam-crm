@@ -1337,28 +1337,37 @@ window.doLogin=function(){
     sessionStorage.setItem('glam_auth','1');
     document.getElementById('login-screen').style.display='none';
     document.getElementById('layout').style.display='';
+    document.getElementById('mob-nav').style.display='';
+    render();
   } else {
     document.getElementById('login-err').textContent=t('loginError');
     document.getElementById('login-pin').value='';
+    document.getElementById('login-pin').focus();
   }
 };
 
 window.doLogout=function(){
   sessionStorage.removeItem('glam_auth');
-  document.getElementById('login-screen').style.display='';
+  document.getElementById('login-screen').style.display='flex';
   document.getElementById('layout').style.display='none';
+  document.getElementById('mob-nav').style.display='none';
   document.getElementById('login-pin').value='';
   document.getElementById('login-err').textContent='';
+  document.getElementById('login-pin').focus();
 };
 
 function checkAuth(){
-  if(DB.settings.pin && !sessionStorage.getItem('glam_auth')){
-    document.getElementById('login-screen').style.display='';
+  const pin=(DB.settings.pin||'').trim();
+  if(pin.length>0 && !sessionStorage.getItem('glam_auth')){
+    document.getElementById('login-screen').style.display='flex';
     document.getElementById('layout').style.display='none';
+    document.getElementById('mob-nav').style.display='none';
     document.getElementById('login-title').textContent=t('loginTitle');
     document.getElementById('login-btn').textContent=t('loginBtn');
+    document.getElementById('login-pin').focus();
   } else {
     document.getElementById('login-screen').style.display='none';
+    document.getElementById('layout').style.display='';
   }
 }
 
